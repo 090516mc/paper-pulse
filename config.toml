@@ -6,7 +6,7 @@ days_back = 30
 
 # Base URL of the GitHub Pages site (used for RSS feed links)
 # Example: "https://username.github.io/paper-pulse"
-site_url = "https://jamie-cui.github.io/paper-pulse"
+site_url = "https://090516mc.github.io/paper-pulse"
 
 # Data storage paths (relative to project root)
 data_dir = "data"
@@ -17,7 +17,7 @@ failed_file = "failed.json"
 # arXiv fetcher settings
 [fetchers.arxiv]
 # Categories to fetch from arXiv
-categories = ["cs.CR", "cs.AI", "cs.LG", "cs.CL"]
+categories = ["cs.AI", "cs.LG", "cs.CL", "cs.CV", "cs.CR", "cs.SE", "cs.NI", "cs.DC", "cs.DS", "cs.IR", "cs.RO", "cs.NE", "stat.ML"]
 # Delay between requests (seconds) - arXiv recommends 3+ seconds
 delay = 3.0
 # Maximum number of results per category

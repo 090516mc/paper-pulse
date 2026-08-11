@@ -1,9 +1,9 @@
 name: Fetch Papers
 
 on:
-  # Daily at 00:00 UTC
+  # Weekly at 00:00 UTC on Sunday
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '0 0 * * 0'
 
   # Manual trigger
   workflow_dispatch:
@@ -32,7 +32,9 @@ jobs:
       - name: Fetch and summarize papers
         id: fetch
         env:
-          MODELSCOPE_API_KEY: ${{ secrets.MODELSCOPE_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_API_BASE: ${{ secrets.OPENAI_API_BASE }}
+          OPENAI_MODEL: ${{ secrets.OPENAI_MODEL }}
         run: |
           python scripts/main.py
 
@@ -50,11 +52,11 @@ jobs:
         if: success()
         uses: dawidd6/action-send-mail@v3
         with:
-          server_address: smtp.gmail.com
-          server_port: 465
+          server_address: ${{ secrets.SMTP_SERVER }}
+          server_port: ${{ secrets.SMTP_PORT }}
           username: ${{ secrets.EMAIL_USERNAME }}
           password: ${{ secrets.EMAIL_PASSWORD }}
-          subject: Paper Pulse Daily Report - ${{ steps.date.outputs.date }}
+          subject: Paper Pulse Weekly Report - ${{ steps.date.outputs.date }}
           to: ${{ secrets.EMAIL_TO }}
           from: Paper Pulse Bot <${{ secrets.EMAIL_USERNAME }}>
           body: file://data/email_report.txt

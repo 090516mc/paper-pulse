@@ -30,7 +30,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 from fetchers.arxiv import ArxivFetcher
 from fetchers.iacr import IACRFetcher
 from filter import KeywordFilter
-from summarizer import ModelScopeSummarizer
+from summarizer import ModelScopeSummarizer, OpenAISummarizer
 from rss import generate_rss_feed
 
 # Load TOML config (Python 3.11+ has tomllib built-in)
@@ -185,7 +185,7 @@ def generate_email_report(
 
     lines.append(sep)
     lines.append("This is an automated report from Paper Pulse.")
-    lines.append("Powered by arXiv, IACR ePrint, and DashScope (Qwen).")
+    lines.append("Powered by arXiv, IACR ePrint, and DeepSeek AI.")
     lines.append(sep)
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -289,13 +289,21 @@ def main():
     PAPERS_FILE = DATA_DIR / config.get("general", {}).get("papers_file", "papers.json")
     FAILED_FILE = DATA_DIR / config.get("general", {}).get("failed_file", "failed.json")
 
-    # Get API key from environment
-    api_key = os.getenv("MODELSCOPE_API_KEY") or os.getenv("DASHSCOPE_API_KEY")
-    if not api_key:
+    # Get API key from environment (support both OpenAI-compatible and DashScope)
+    openai_api_key = os.getenv("OPENAI_API_KEY")
+    modelscope_api_key = os.getenv("MODELSCOPE_API_KEY") or os.getenv("DASHSCOPE_API_KEY")
+    use_openai = bool(openai_api_key)
+
+    if use_openai:
+        api_key = openai_api_key
+        api_type = "OpenAI-compatible (DeepSeek)"
+    elif modelscope_api_key:
+        api_key = modelscope_api_key
+        api_type = "DashScope (Qwen)"
+    else:
         print(
-            "::error::API key not set. Please set DASHSCOPE_API_KEY in GitHub Secrets"
+            "::error::API key not set. Please set OPENAI_API_KEY or DASHSCOPE_API_KEY in GitHub Secrets"
         )
-        print("Get your API key from: https://dashscope.console.aliyun.com/")
         sys.exit(1)
 
     # Initialize components
@@ -323,17 +331,35 @@ def main():
 
         # Get summarizer config
         summarizer_config = config.get("summarizer", {})
-        summarizer = ModelScopeSummarizer(
-            api_key=api_key,
-            model=summarizer_config.get("model"),
-            max_tokens=summarizer_config.get("max_tokens"),
-            temperature=summarizer_config.get("temperature"),
-            timeout=summarizer_config.get("timeout"),
-            rate_limit_delay=summarizer_config.get("rate_limit_delay"),
-            max_retries=summarizer_config.get("max_retries", 3),
-            retry_delay=summarizer_config.get("retry_delay", 5.0),
-            prompt_template=summarizer_config.get("prompt_template"),
-        )
+        if use_openai:
+            api_base = os.getenv("OPENAI_API_BASE", "https://api.deepseek.com/v1")
+            openai_model = os.getenv("OPENAI_MODEL", "deepseek-chat")
+            print(f"Using OpenAI-compatible API: {api_base} (model: {openai_model})")
+            summarizer = OpenAISummarizer(
+                api_key=api_key,
+                api_base=api_base,
+                model=openai_model,
+                max_tokens=summarizer_config.get("max_tokens"),
+                temperature=summarizer_config.get("temperature"),
+                timeout=summarizer_config.get("timeout"),
+                rate_limit_delay=summarizer_config.get("rate_limit_delay"),
+                max_retries=summarizer_config.get("max_retries", 3),
+                retry_delay=summarizer_config.get("retry_delay", 5.0),
+                prompt_template=summarizer_config.get("prompt_template"),
+            )
+        else:
+            print(f"Using DashScope API (model: {summarizer_config.get('model', 'qwen-plus')})")
+            summarizer = ModelScopeSummarizer(
+                api_key=api_key,
+                model=summarizer_config.get("model"),
+                max_tokens=summarizer_config.get("max_tokens"),
+                temperature=summarizer_config.get("temperature"),
+                timeout=summarizer_config.get("timeout"),
+                rate_limit_delay=summarizer_config.get("rate_limit_delay"),
+                max_retries=summarizer_config.get("max_retries", 3),
+                retry_delay=summarizer_config.get("retry_delay", 5.0),
+                prompt_template=summarizer_config.get("prompt_template"),
+            )
         print("✓ All components initialized")
 
     # Load existing data

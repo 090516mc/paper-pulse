@@ -4,58 +4,88 @@
 # Lines starting with # are comments
 # Empty lines are ignored
 
-# LLM and AI related
-# llm
-# large language model
-# language model
-# gpt
-# bert
-# transformer
-# neural network
-# deep learning
-# machine learning
-# ai
-# artificial intelligence
+# ====== Comprehensive Research Topics ======
 
-# Generative AI
-# generative
-# chatbot
-# prompt
-# fine-tuning
-# foundation model
-# diffusion
+# AI & Machine Learning
+large language model
+transformer
+neural network
+deep learning
+machine learning
+artificial intelligence
+foundation model
+diffusion model
+generative ai
 
-# AI Security specific
+# Computer Vision
+object detection
+image segmentation
+visual recognition
+computer vision
+image generation
+video understanding
+
+# NLP & Speech
+natural language processing
+speech recognition
+text generation
+machine translation
+sentiment analysis
+named entity recognition
+
+# Data Science & Analytics
+data mining
+data science
+big data
+data analytics
+knowledge graph
+recommendation system
+
+# Security & Privacy
+cybersecurity
 adversarial machine learning
-backdoor neural
-trojan ai
-model poisoning
-data poisoning
-membership inference
-model extraction
-prompt injection
-jailbreak llm
-
-llm security
-agent security
-inference security
-train security
-
-# Cryptography + AI combinations
-privacy-preserving machine learning
-federated learning
-homomorphic encryption machine learning
-secure multi-party computation machine learning
-differential privacy machine learning
-zkp machine learning
-zero-knowledge machine learning
-
-# Crypto
-crypto
-DP
 differential privacy
+federated learning
+privacy preserving
+homomorphic encryption
+zero knowledge proof
 
-# Code and AI
-# code generation
-# copilot
-# program synthesis ai
+# Software Engineering
+software engineering
+program analysis
+code generation
+program synthesis
+software testing
+bug detection
+
+# Systems & Networking
+distributed system
+cloud computing
+edge computing
+network security
+operating system
+database system
+
+# Theory & Algorithms
+algorithm design
+optimization algorithm
+graph theory
+computational complexity
+online algorithm
+approximation algorithm
+
+# Robotics & Control
+robotics
+autonomous system
+reinforcement learning
+control theory
+multi-agent system
+motion planning
+
+# Interdisciplinary
+quantum computing
+computational biology
+bioinformatics
+computational neuroscience
+human computer interaction
+information retrieval
