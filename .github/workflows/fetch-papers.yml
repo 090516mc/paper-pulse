@@ -48,7 +48,7 @@ jobs:
           echo "owner=${{ github.repository_owner }}" >> $GITHUB_OUTPUT
           echo "repo=${{ github.event.repository.name }}" >> $GITHUB_OUTPUT
 
-      - name: Send email notification
+      - name: Send email notification with PDF attachment
         if: success()
         uses: dawidd6/action-send-mail@v3
         with:
@@ -60,6 +60,7 @@ jobs:
           to: ${{ secrets.EMAIL_TO }}
           from: Paper Pulse Bot <${{ secrets.EMAIL_USERNAME }}>
           body: file://data/email_report.txt
+          attachments: data/weekly_report.pdf
 
       - name: Commit and push changes
         run: |

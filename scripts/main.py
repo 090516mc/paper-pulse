@@ -590,6 +590,19 @@ def main():
         summary_language=summary_language,
     )
 
+    # Generate weekly PDF report
+    with github_group(" Generating weekly PDF report"):
+        try:
+            from pdf_generator import generate_pdf, load_papers
+            pdf_output = DATA_DIR / "weekly_report.pdf"
+            pdf_papers = load_papers(DATA_DIR)
+            if pdf_papers:
+                generate_pdf(pdf_papers, pdf_output, site_url)
+        except ImportError as e:
+            print(f"PDF generation skipped (fpdf2 not installed?): {e}")
+        except Exception as e:
+            print(f"PDF generation failed: {e}")
+
 
 if __name__ == "__main__":
     main()
