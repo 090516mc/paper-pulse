@@ -2,7 +2,7 @@
 
 [general]
 # Number of days to keep papers and cache summaries
-days_back = 30
+days_back = 99999
 
 # Base URL of the GitHub Pages site (used for RSS feed links)
 # Example: "https://username.github.io/paper-pulse"
