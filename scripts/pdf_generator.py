@@ -266,9 +266,9 @@ def generate_pdf(papers: list, output_path: Path, site_url: str = ""):
     pdf = PaperPDF()
     pdf.set_auto_page_break(auto=True, margin=20)
 
-    # Add the fonts
-    pdf.add_font("NotoSansCJK", "", str(FONT_PATH))
-    pdf.add_font("NotoSansCJK", "B", str(FONT_BOLD_PATH))
+    # Add the fonts with Unicode support for Chinese characters
+    pdf.add_font("NotoSansCJK", "", str(FONT_PATH), uni=True)
+    pdf.add_font("NotoSansCJK", "B", str(FONT_BOLD_PATH), uni=True)
 
     date_str = datetime.now().strftime("%Y-%m-%d %H:%M UTC")
     paper_count = len(papers)
